@@ -18,7 +18,7 @@ class CategoryController extends Controller
                 return [
                     'id' => $category->id,
                     'name' => $category->name,
-                    'icon' => asset('storage/' . $category->icon),
+                    'icon' => $category->icon ? asset('storage/' . $category->icon) : null,
                 ];
             })
         ]);
@@ -29,7 +29,7 @@ class CategoryController extends Controller
         return response()->json([
             'id' => $category->id,
             'name' => $category->name,
-            'icon' => asset('storage/' . $category->icon),
+            'icon' => $category->icon ? asset('storage/' . $category->icon) : null,
         ]);
     }
 
