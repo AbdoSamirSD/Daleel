@@ -117,7 +117,8 @@ class ShopController extends Controller
 
     public function searchShops($query)
     {
-        $shops = Shop::where('name', 'LIKE', "%$query%")
+        $shops = Shop::select(['name', 'image'])
+                ->where('name', 'LIKE', "%$query%")
                 ->orWhere('description', 'LIKE', "%$query%")
                 ->orWhere('address', 'LIKE', "%$query%")
                 ->orWhere('phone', 'LIKE', "%$query%")
