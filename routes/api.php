@@ -12,7 +12,7 @@ Route::prefix('user')->group(function () {
     Route::get('/{categoryId}/shops', [ShopController::class, 'shopsByCategory']);
     Route::get('/shops/{shop}', [ShopController::class, 'showDetails']);
     Route::get('banners', [ShopController::class, 'listBanners']);
-    Route::get('search/shops', [ShopController::class, 'searchShops']);
+    Route::get('search/shops/{query}', [ShopController::class, 'searchShops']);
 });
 
 
