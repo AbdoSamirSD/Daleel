@@ -115,37 +115,17 @@ class ShopController extends Controller
     }
 
 
-    public function searchShops(Request $request)
+    public function searchShops($query)
     {
-        if (!$request->filled('query')) {
-            return response()->json(['error' => 'Search query is required'], 400);
-        }
-        $query = $request->input('query');
-        $shops = Shop::select('id', 'name', 'image', 'description')
-            ->where('name', 'LIKE', "%{$query}%")
-            ->orWhere('description', 'LIKE', "%{$query}%")
-            ->paginate(20);
-
-        if ($shops->total() === 0) {
-            return response()->json(['message' => 'No shops found matching the query'], 404);
-        }
-
-        $shops->getCollection()->transform(function ($shop) {
-            return [
-                'id' => $shop->id,
-                'name' => $shop->name,
-                'image' => $shop->image && Storage::disk('public')->exists($shop->image) ? asset('storage/' . $shop->image) : null,
-            ];
-        });
-
-        return response()->json(['shops' => $shops,
-            'meta' => [
-                'current_page' => $shops->currentPage(),
-                'last_page' => $shops->lastPage(),
-                'per_page' => $shops->perPage(),
-                'total' => $shops->total(),
-            ]
-        ], 200);
+        $shops = Shop::where('name', 'LIKE', "%$query%")
+                ->orWhere('description', 'LIKE', "%$query%")
+                ->orWhere('address', 'LIKE', "%$query%")
+                ->orWhere('phone', 'LIKE', "%$query%")
+                ->orWhereHas('category', function ($q) use ($query) {
+                    $q->where('name', 'LIKE', "%$query%");
+                })
+                ->get();
+        return response()->json(['shops' => $shops], 200);
     }
 
     public function listBanners()
