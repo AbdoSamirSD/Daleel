@@ -32,14 +32,23 @@ class ShopController extends Controller
             });
         }
 
-        $shops = $query->get();
+        // shops paginated
+        $shops = $query->paginate(10);
         return response()->json([
             'shops' => $shops->map(function ($shop) {
                 return [
                     'name' => $shop->name,
                     'image' => $shop->image && Storage::disk('public')->exists($shop->image) ? asset('storage/' . $shop->image) : null,
                 ];
-            })
+            }),
+            'pagination' => [
+                'total' => $shops->total(),
+                'per_page' => $shops->perPage(),
+                'current_page' => $shops->currentPage(),
+                'last_page' => $shops->lastPage(),
+                'from' => $shops->firstItem(),
+                'to' => $shops->lastItem(),
+            ]
         ]);
     }
 
