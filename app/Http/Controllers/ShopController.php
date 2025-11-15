@@ -12,15 +12,29 @@ class ShopController extends Controller
 {
     //
 
-    public function shopsByCategory($categoryId)
+    public function shopsByCategory($categoryId, Request $request)
     {
         // Logic to retrieve shops by category
         $category = Category::find($categoryId);
         if (!$category) {
             return response()->json(['error' => 'Category not found'], 404);
         }
+
+        $query = Shop::where('category_id', $categoryId);
+
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('address', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('phone', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        $shops = $query->get();
         return response()->json([
-            'shops' => $category->shops->map(function ($shop) {
+            'shops' => $shops->map(function ($shop) {
                 return [
                     'name' => $shop->name,
                     'image' => $shop->image && Storage::disk('public')->exists($shop->image) ? asset('storage/' . $shop->image) : null,
@@ -112,21 +126,6 @@ class ShopController extends Controller
         }
         $shop->delete();
         return response()->json(['message' => 'Shop deleted successfully'], 200);
-    }
-
-
-    public function searchShops($query)
-    {
-        $shops = Shop::select(['name', 'image'])
-                ->where('name', 'LIKE', "%$query%")
-                ->orWhere('description', 'LIKE', "%$query%")
-                ->orWhere('address', 'LIKE', "%$query%")
-                ->orWhere('phone', 'LIKE', "%$query%")
-                ->orWhereHas('category', function ($q) use ($query) {
-                    $q->where('name', 'LIKE', "%$query%");
-                })
-                ->get();
-        return response()->json(['shops' => $shops], 200);
     }
 
     public function listBanners()

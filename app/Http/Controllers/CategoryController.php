@@ -10,9 +10,17 @@ class CategoryController extends Controller
 {
     //
 
-    public function showAll()
+    public function showAll(Request $request)
     {
-        $categories = Category::all();
+
+        $categories = Category::query();
+
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            $categories->where('name', 'like', '%' . $searchTerm . '%');
+        }
+
+        $categories = $categories->get();
         return response()->json([
             'categories' => $categories->map(function ($category) {
                 return [
