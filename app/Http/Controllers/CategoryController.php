@@ -54,11 +54,12 @@ class CategoryController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+            $icon = $request->file('icon');
+            $filename = time() . '_' . $icon->getClientOriginalName();
+            $icon->move(public_path('category_icons'), $filename);
         Category::create([
             'name' => request('name'),
-            // store icon file in public storage
-            'icon' => request()->file('icon')->store('category_icons', 'public'),
+            'icon' => 'category_icons/' . $filename,
         ]);
 
         return response()->json(['message' => 'Category created successfully']);
