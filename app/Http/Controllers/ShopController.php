@@ -142,7 +142,15 @@ class ShopController extends Controller
         // Logic to list all banners
         // Assuming Banner is another model related to Shop
         $banners = Banner::all();
-        return response()->json(['banners' => $banners], 200);
+        return response()->json([ 
+            'banners' => $banners->map(function ($banner) {
+                return [
+                    'id' => $banner->id,
+                    'title' => $banner->title,
+                    'image' => $banner->image_path ? asset('public/' . $banner->image_path) : null,
+                ];
+            })
+        ], 200);
     }
 
     public function uploadBanner(Request $request)
