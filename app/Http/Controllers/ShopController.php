@@ -149,6 +149,7 @@ class ShopController extends Controller
     {
         // Logic to upload a new banner
         $validator = Validator::make($request->all(), [
+            'title' => 'sometimes|string|max:255',
             'image' => 'required|image|max:4096',
         ]);
 
@@ -160,6 +161,11 @@ class ShopController extends Controller
         $image_name = time() . '_' . $banner->getClientOriginalName();
         $banner->move(public_path('banners'), $image_name);
         $banner = Banner::create(['image' => 'banners/' . $image_name]);
+        $title = $request->input('title');
+        if ($title) {
+            $banner->title = $title;
+            $banner->save();
+        }
 
 
         return response()->json(['message' => 'Banner uploaded successfully', 'banner' => $banner], 201);
