@@ -44,26 +44,30 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        // Logic to create a new category
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'icon' => 'required|image|mimes:png,jpg|max:2048',
+            'icon' => 'required|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-            $icon = $request->file('icon');
-            $filename = time() . '_' . $icon->getClientOriginalName();
-            $icon->move(public_path('category_icons'), $filename);
+
+        // رفع الصورة داخل public/category_icons
+        $icon = $request->file('icon');
+        $filename = time() . '_' . $icon->getClientOriginalName();
+
+        // انتقال الصورة لمجلد public
+        $icon->move(public_path('category_icons'), $filename);
+
         Category::create([
-            'name' => request('name'),
-            'icon' => 'category_icons/' . $filename,
+            'name' => $request->name,
+            'icon' => 'category_icons/' . $filename, // المسار اللي يتخزن في الداتابيز
         ]);
 
         return response()->json(['message' => 'Category created successfully']);
     }
+
 
     public function update(Category $category)
     {
