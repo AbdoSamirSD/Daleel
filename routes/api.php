@@ -14,7 +14,7 @@ Route::prefix('user')->group(function () {
     Route::get('banners', [ShopController::class, 'listBanners']);
 });
 
-
+Route::post('/admin/login', [ShopController::class, 'adminLogin']);
 // Admin Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/categories/{category}', [CategoryController::class, 'index']);

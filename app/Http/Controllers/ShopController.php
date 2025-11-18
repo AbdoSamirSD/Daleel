@@ -180,4 +180,27 @@ class ShopController extends Controller
             'image' => $banner->image && Storage::disk('public')->exists($banner->image) ? asset('storage/' . $banner->image) : null,
         ]);
     }
+
+    public function adminLogin(Request $request)
+    {
+        // Logic for admin login
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $credentials = $validator->validated();
+
+        if (!auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+
+        $token = auth()->user()->createToken('admin-token')->plainTextToken;
+
+        return response()->json(['message' => 'Login successful', 'token' => $token], 200);
+    }
 }
