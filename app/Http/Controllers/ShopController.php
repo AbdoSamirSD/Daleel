@@ -180,7 +180,7 @@ class ShopController extends Controller
         // Logic to show banner details
         return response()->json([
             'id' => $banner->id,
-            'image' => $banner->image && Storage::disk('public')->exists($banner->image) ? asset('storage/' . $banner->image) : null,
+            'image' => $banner->image ? asset('public/' . $banner->image) : null,
         ]);
     }
 
