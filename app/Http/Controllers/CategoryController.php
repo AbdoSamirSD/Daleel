@@ -26,7 +26,7 @@ class CategoryController extends Controller
                 return [
                     'id' => $category->id,
                     'name' => $category->name,
-                    'icon' => $category->icon ? asset('storage/' . $category->icon) : null,
+                    'icon' => $category->icon ? asset('public/' . $category->icon) : null,
                 ];
             })
         ]);
