@@ -39,6 +39,7 @@ class ShopController extends Controller
                 return [
                     'name' => $shop->name,
                     'image' => $shop->image ? asset('public/' . $shop->image) : null,
+                    'description' => $shop->description,
                     'address' => $shop->address,
                     'phone' => $shop->phone,
                     'category_id' => $shop->category_id,
