@@ -156,8 +156,11 @@ class ShopController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $imagePath = $request->file('image')->store('banners', 'public');
-        $banner = Banner::create(['image' => $imagePath]);
+        $banner = $request->file('image');
+        $image_name = time() . '_' . $banner->getClientOriginalName();
+        $banner->move(public_path('banners'), $image_name);
+        $banner = Banner::create(['image' => 'banners/' . $image_name]);
+
 
         return response()->json(['message' => 'Banner uploaded successfully', 'banner' => $banner], 201);
     }
