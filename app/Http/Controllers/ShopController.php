@@ -39,6 +39,9 @@ class ShopController extends Controller
                 return [
                     'name' => $shop->name,
                     'image' => $shop->image ? asset('public/' . $shop->image) : null,
+                    'address' => $shop->address,
+                    'phone' => $shop->phone,
+                    'category_id' => $shop->category_id,
                 ];
             }),
             'pagination' => [
