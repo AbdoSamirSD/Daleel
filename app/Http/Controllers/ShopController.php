@@ -38,7 +38,7 @@ class ShopController extends Controller
             'shops' => $shops->map(function ($shop) {
                 return [
                     'name' => $shop->name,
-                    'image' => $shop->image && Storage::disk('public')->exists($shop->image) ? asset('storage/' . $shop->image) : null,
+                    'image' => $shop->image ? asset('public/' . $shop->image) : null,
                 ];
             }),
             'pagination' => [
@@ -86,12 +86,18 @@ class ShopController extends Controller
         $data = $validator->validated();
         if($request->hasFile('image')) {
             // Handle image upload
-            $imagePath = $request->file('image')->store('shop_images', 'public');
-            $data['image'] = $imagePath;
+            $image = $request->file('image');
+            $image_name = time() . '_' . $request->file('image')->getClientOriginalName();
+            $image->move(public_path('shop_images'), $image_name);
+            $data['image'] = 'shop_images/' . $image_name;
         }
-        Shop::create($data);
+        $shop = Shop::create($data);
         return response()->json(['message' => 'Shop created successfully', 'shop' => [
-            'name' => $data['name'],
+            'name' => $shop->name,
+            'image' => isset($data['image']) ? asset('public/' . $data['image']) : null,
+            'category_id' => $shop->category_id,
+            'address' => $shop->address,
+            'phone' => $shop->phone,
         ]], 201);
     }
 
