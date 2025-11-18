@@ -57,6 +57,7 @@ class CategoryController extends Controller
 
         Category::create([
             'name' => request('name'),
+            // store icon file in public storage
             'icon' => request()->file('icon')->store('category_icons', 'public'),
         ]);
 
