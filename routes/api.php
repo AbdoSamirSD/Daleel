@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin/categories/{categoryId}/update', [CategoryController::class, 'update']);
     Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy']);
 
-    Route::get('/admin/shops', [ShopController::class, 'shopsByCategory']);
+    Route::get('/admin/shops/{categoryId}', [ShopController::class, 'shopsByCategory']);
     Route::post('/admin/shops', [ShopController::class, 'store']);
     Route::post('/admin/shops/{shop}/update', [ShopController::class, 'update']);
     Route::delete('/admin/shops/{shop}', [ShopController::class, 'destroy']);
