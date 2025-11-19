@@ -28,8 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin/shops/{shopId}/update', [ShopController::class, 'update']);
     Route::delete('/admin/shops/{shopId}', [ShopController::class, 'destroy']);
 
-    Route::post('/admin/banner/upload', [ShopController::class, 'uploadBanner']);
-    Route::delete('/admin/banners/{banner}', [ShopController::class, 'deleteBanner']);
-    Route::get('/admin/banner/{banner}', [ShopController::class, 'showBanner']);
+    Route::post('/admin/banners/', [ShopController::class, 'uploadBanner']);
+    Route::delete('/admin/banners/{bannerId}', [ShopController::class, 'deleteBanner']);
+    
     Route::post('/admin/about', [CategoryController::class, 'updateAbout']);
 });

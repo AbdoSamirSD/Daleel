@@ -210,21 +210,12 @@ class ShopController extends Controller
 
     public function deleteBanner(Banner $banner)
     {
-        // Logic to delete a banner
-        if (Storage::disk('public')->exists($banner->image)) {
-            Storage::disk('public')->delete($banner->image);
+        // Logic to delete a banner from public path
+        if(file_exists(public_path($banner->image))) {
+            unlink(public_path($banner->image));
         }
         $banner->delete();
         return response()->json(['message' => 'Banner deleted successfully'], 200);
-    }
-
-    public function showBanner(Banner $banner)
-    {
-        // Logic to show banner details
-        return response()->json([
-            'id' => $banner->id,
-            'image' => $banner->image ? asset('public/' . $banner->image) : null,
-        ]);
     }
 
     public function adminLogin(Request $request)
