@@ -211,8 +211,14 @@ class ShopController extends Controller
     public function deleteBanner(Banner $banner)
     {
         // Logic to delete a banner from public path
-        if(file_exists(public_path($banner->image))) {
-            unlink(public_path($banner->image));
+        if (!empty($banner->image)) 
+        {
+            $imagePath = public_path($banner->image);
+
+            // تأكد أن الملف فعليًا موجود قبل ما تعمل unlink
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
         }
         $banner->delete();
         return response()->json(['message' => 'Banner deleted successfully'], 200);
