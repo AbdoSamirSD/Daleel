@@ -124,13 +124,24 @@ class ShopController extends Controller
 
         if(request()->hasFile('image')) {
             // Handle image upload and update
-            if ($shop->image && Storage::disk('public')->exists($shop->image)) {
-                Storage::disk('public')->delete($shop->image);
+            if ($shop->image && file_exists(public_path($shop->image))) {
+                unlink(public_path($shop->image));
             }
-            $imagePath = request()->file('image')->store('shop_images', 'public');
-            $data['image'] = $imagePath;
+
+            $image = request()->file('image');
+            $image_name = time() . '_' . request()->file('image')->getClientOriginalName();
+            $image->move(public_path('shop_images'), $image_name);
+
+            $data['image'] = 'shop_images/' . $image_name;
         }
-        $shop->update($data);
+        $shop->update([
+            'name' => $data['name'] ?? $shop->name,
+            'category_id' => $data['category_id'] ?? $shop->category_id,
+            'description' => $data['description'] ?? $shop->description,
+            'image' => $data['image'] ?? $shop->image,
+            'address' => $data['address'] ?? $shop->address,
+            'phone' => $data['phone'] ?? $shop->phone,
+        ]);
         return response()->json(['message' => 'Shop updated successfully', 'shop' => [
             'name' => $shop->name,
         ]], 200);
@@ -139,9 +150,9 @@ class ShopController extends Controller
     public function destroy(Shop $shop)
     {
         // Logic to delete a shop
-        // delete image file if exists
-        if ($shop->image && Storage::disk('public')->exists($shop->image)) {
-            Storage::disk('public')->delete($shop->image);
+        // delete image file if exists from public path
+        if ($shop->image && file_exists(public_path($shop->image))) {
+            unlink(public_path($shop->image));
         }
         $shop->delete();
         return response()->json(['message' => 'Shop deleted successfully'], 200);

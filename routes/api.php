@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/admin/shops', [ShopController::class, 'shopsByCategory']);
     Route::post('/admin/shops', [ShopController::class, 'store']);
-    Route::put('/admin/shops/{shop}', [ShopController::class, 'update']);
+    Route::post('/admin/shops/{shop}/update', [ShopController::class, 'update']);
     Route::delete('/admin/shops/{shop}', [ShopController::class, 'destroy']);
 
     Route::post('/admin/banner/upload', [ShopController::class, 'uploadBanner']);
