@@ -64,7 +64,7 @@ class ShopController extends Controller
             'name' => $shop->name,
             'category_id' => $shop->category_id,
             'description' => $shop->description,
-            'image' => $shop->image && Storage::disk('public')->exists($shop->image) ? asset('storage/' . $shop->image) : null,
+            'image' => $shop->image ? asset('public/' . $shop->image) : null,
             'address' => $shop->address,
             'phone' => $shop->phone,
         ]);
