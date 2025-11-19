@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 
