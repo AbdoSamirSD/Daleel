@@ -40,7 +40,6 @@ class CategoryController extends Controller
         ]);
     }
 
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -66,7 +65,6 @@ class CategoryController extends Controller
 
         return response()->json(['message' => 'Category created successfully']);
     }
-
 
     public function update($categoryId)
     {
