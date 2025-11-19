@@ -208,14 +208,17 @@ class ShopController extends Controller
         return response()->json(['message' => 'Banner uploaded successfully', 'banner' => $banner], 201);
     }
 
-    public function deleteBanner(Banner $banner)
+    public function deleteBanner($bannerId)
     {
-        // Logic to delete a banner from public path
+        $banner = Banner::find($bannerId);
+        if (!$banner) {
+            return response()->json(['error' => 'Banner not found'], 404);
+        }
+        // Logic to delete a banner
         if (!empty($banner->image)) 
         {
             $imagePath = public_path($banner->image);
 
-            // تأكد أن الملف فعليًا موجود قبل ما تعمل unlink
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
