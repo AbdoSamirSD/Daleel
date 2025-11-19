@@ -107,6 +107,9 @@ class ShopController extends Controller
 
     public function update(Shop $shop)
     {
+        if (!$shop) {
+            return response()->json(['error' => 'Shop not found'], 404);
+        }
         // Logic to update an existing shop
         $validator = Validator::make(request()->all(), [
             'name' => 'sometimes|string|max:255',
