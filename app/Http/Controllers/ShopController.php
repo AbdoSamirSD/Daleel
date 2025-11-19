@@ -105,8 +105,9 @@ class ShopController extends Controller
         ]], 201);
     }
 
-    public function update(Shop $shop)
+    public function update( $shopId)
     {
+        $shop = Shop::find($shopId);
         if (!$shop) {
             return response()->json(['error' => 'Shop not found'], 404);
         }
