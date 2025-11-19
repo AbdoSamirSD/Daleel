@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Models\About;
 class CategoryController extends Controller
 {
@@ -75,18 +74,31 @@ class CategoryController extends Controller
 
         $validator = Validator::make(request()->all(), [
             'name' => 'sometimes|string|max:255',
-            'icon' => 'sometimes|image|mimes:png,jpg|max:2048',
+            'icon' => 'sometimes|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $category->update([
-            'name' => request('name', $category->name),
-            'icon' => request()->file('icon') ? request()->file('icon')->store('category_icons', 'public') : $category->icon,
-        ]);
+        if (request()->has('name')) {
+            $category->name = request()->input('name');
+        }
 
+        if (request()->hasFile('icon')) {
+            // delete old icon file if exists from public path
+            if ($category->icon && file_exists(public_path($category->icon))) {
+                unlink(public_path($category->icon));
+            }
+            // upload new icon
+            $icon = request()->file('icon');
+            $filename = time() . '_' . $icon->getClientOriginalName();
+            // move the icon to public/category_icons
+            $icon->move(public_path('category_icons'), $filename);
+            // update category icon path
+            $category->icon = 'category_icons/' . $filename;
+        }
+        $category->save();
         return response()->json(['message' => 'Category updated successfully']);
     }
 
