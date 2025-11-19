@@ -20,7 +20,7 @@ Route::post('/admin/login', [ShopController::class, 'adminLogin']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/categories/{category}', [CategoryController::class, 'index']);
     Route::post('/admin/categories', [CategoryController::class, 'store']);
-    Route::put('/admin/categories/{category}', [CategoryController::class, 'update']);
+    Route::put('/admin/categories/{categoryId}', [CategoryController::class, 'update']);
     Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy']);
 
     Route::get('/admin/shops', [ShopController::class, 'shopsByCategory']);

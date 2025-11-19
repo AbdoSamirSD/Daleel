@@ -68,7 +68,7 @@ class CategoryController extends Controller
     }
 
 
-    public function update(Category $category)
+    public function update($categoryId)
     {
         // Logic to update an existing category
 
@@ -81,6 +81,7 @@ class CategoryController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        $category = Category::find($categoryId);
         if (request()->has('name')) {
             $category->name = request()->input('name');
         }
