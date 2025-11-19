@@ -151,8 +151,12 @@ class ShopController extends Controller
         ]], 200);
     }
 
-    public function destroy(Shop $shop)
+    public function destroy($shopId)
     {
+        $shop = Shop::find($shopId);
+        if (!$shop) {
+            return response()->json(['error' => 'Shop not found'], 404);
+        }
         // Logic to delete a shop
         // delete image file if exists from public path
         if ($shop->image && file_exists(public_path($shop->image))) {
