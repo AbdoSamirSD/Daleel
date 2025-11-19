@@ -12,6 +12,7 @@ Route::prefix('user')->group(function () {
     Route::get('/{categoryId}/shops', [ShopController::class, 'shopsByCategory']);
     Route::get('/shops/{shop}', [ShopController::class, 'showDetails']);
     Route::get('banners', [ShopController::class, 'listBanners']);
+    Route::get('about', [CategoryController::class, 'about']);
 });
 
 Route::post('/admin/login', [ShopController::class, 'adminLogin']);

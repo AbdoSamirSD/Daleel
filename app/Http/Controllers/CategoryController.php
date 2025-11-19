@@ -5,7 +5,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\About;
 class CategoryController extends Controller
 {
     //
@@ -100,5 +100,34 @@ class CategoryController extends Controller
         }
         $category->delete();
         return response()->json(['message' => 'Category deleted successfully']);
+    }
+
+    public function about()
+    {
+        $bout = About::firstOrCreate(['id' => 1], [
+            'content' => 'Default about content',
+            'phone' => '000-000-0000',
+        ]);
+        return response()->json([
+            'content' =>$bout->content,
+            'phone' =>$bout->phone,
+        ]);
+    }
+
+    public function updateAbout(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string',
+            'phone' => 'required|string|max:20',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $about = About::firstOrCreate(['id' => 1]);
+        $about->update($validator->validated());
+
+        return response()->json(['message' => 'About information updated successfully']);
     }
 }
