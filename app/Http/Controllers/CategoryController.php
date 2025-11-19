@@ -107,10 +107,11 @@ class CategoryController extends Controller
     {
         // Logic to delete a category
 
-        // delete icon file if exists
-        if ($category->icon && Storage::disk('public')->exists($category->icon)) {
-            Storage::disk('public')->delete($category->icon);
+        // delete icon file if exists from public path
+        if ($category->icon && file_exists(public_path($category->icon))) {
+            unlink(public_path($category->icon));
         }
+        
         $category->delete();
         return response()->json(['message' => 'Category deleted successfully']);
     }
