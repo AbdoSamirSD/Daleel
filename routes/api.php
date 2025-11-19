@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->group(function () {
     Route::get('/categories', [CategoryController::class, 'showAll']);
     Route::get('/{categoryId}/shops', [ShopController::class, 'shopsByCategory']);
-    Route::get('/shops/{shop}', [ShopController::class, 'showDetails']);
+    Route::get('/shops/{shopId}', [ShopController::class, 'showDetails']);
     Route::get('banners', [ShopController::class, 'listBanners']);
     Route::get('about', [CategoryController::class, 'about']);
 });

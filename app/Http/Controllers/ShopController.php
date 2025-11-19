@@ -55,8 +55,12 @@ class ShopController extends Controller
         ]);
     }
 
-    public function showDetails(Shop $shop)
+    public function showDetails($shopId)
     {
+        $shop = Shop::find($shopId);
+        if (!$shop) {
+            return response()->json(['error' => 'Shop not found'], 404);
+        }
         // Logic to show shop details
         return response()->json([
             'id' => $shop->id,
