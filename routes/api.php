@@ -31,4 +31,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin/banner/upload', [ShopController::class, 'uploadBanner']);
     Route::delete('/admin/banners/{banner}', [ShopController::class, 'deleteBanner']);
     Route::get('/admin/banner/{banner}', [ShopController::class, 'showBanner']);
+    Route::post('/admin/about', [CategoryController::class, 'updateAbout']);
 });
