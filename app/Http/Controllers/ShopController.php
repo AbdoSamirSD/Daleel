@@ -207,8 +207,15 @@ class ShopController extends Controller
             $banner->save();
         }
 
-
-        return response()->json(['message' => 'Banner uploaded successfully', 'banner' => $banner], 201);
+        // send notification to all users about new banner
+        $oneSignalService = new \App\Http\Services\OneSignalService();
+        $notification = $oneSignalService->sendToAllDevices($banner->title, $banner->image_path);
+        
+        return response()->json([
+            'message' => 'Banner uploaded successfully', 
+            'banner' => $banner,
+            'notification_response' => $notification
+        ], 201);
     }
 
     public function deleteBanner($bannerId)
