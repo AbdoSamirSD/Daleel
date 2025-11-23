@@ -209,11 +209,10 @@ class ShopController extends Controller
 
         // send notification to all users about new banner
         $oneSignalService = new \App\Http\Services\OneSignalService();
-        $notification_response = $oneSignalService->sendToAllDevices($banner->title, $banner->image_path);
+        $oneSignalService->sendToAllDevices($banner->title, $banner->image_path);
         return response()->json([
             'message' => 'Banner uploaded successfully', 
             'banner' => $banner,
-            'notification_response' => $notification_response->json(),
         ], 201);
     }
 
