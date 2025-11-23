@@ -214,7 +214,7 @@ class ShopController extends Controller
         return response()->json([
             'message' => 'Banner uploaded successfully', 
             'banner' => $banner,
-            'notification_response' => $notification
+            //'notification_response' => $notification
         ], 201);
     }
 
