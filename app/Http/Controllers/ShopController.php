@@ -32,10 +32,11 @@ class ShopController extends Controller
         }
 
         // shops paginated
-        $shops = $query->paginate(10);
+        $shops = $query->paginate(20);
         return response()->json([
             'shops' => $shops->map(function ($shop) {
                 return [
+                    'id' => $shop->id,
                     'name' => $shop->name,
                     'image' => $shop->image ? asset('public/' . $shop->image) : null,
                     'description' => $shop->description,
@@ -100,6 +101,7 @@ class ShopController extends Controller
         }
         $shop = Shop::create($data);
         return response()->json(['message' => 'Shop created successfully', 'shop' => [
+            'id' => $shop->id,
             'name' => $shop->name,
             'image' => isset($data['image']) ? asset('public/' . $data['image']) : null,
             'category_id' => $shop->category_id,
@@ -142,6 +144,7 @@ class ShopController extends Controller
             $data['image'] = 'shop_images/' . $image_name;
         }
         $shop->update([
+            'id' => $shop->id,
             'name' => $data['name'] ?? $shop->name,
             'category_id' => $data['category_id'] ?? $shop->category_id,
             'description' => $data['description'] ?? $shop->description,
